@@ -19,13 +19,21 @@ DROP USER IF EXISTS 'func1'@'localhost',
 
 CREATE ROLE 'funcionario'@'localhost';
 
-DROP VIEW IF EXISTS pessoacliente;
+DROP VIEW IF EXISTS clientecompleto, aluguelcompleto;
 
-CREATE VIEW pessoacliente AS
+CREATE VIEW clientecompleto AS
     SELECT pessoa.*, cliente.idcliente
     FROM pessoa INNER JOIN cliente ON pessoa.cpf = cliente.cpf;
 
-GRANT SELECT, INSERT ON aluguelcarros.pessoacliente TO 'funcionario'@'localhost';
+CREATE VIEW aluguelcompleto AS
+    SELECT carro.placa, carro.preco, carro.fabricante, carro.modelo, carro.ano, carro.cor, temp.*
+    FROM (
+        SELECT clientecompleto.cpf, clientecompleto.nome, aluguel.*
+        FROM clientecompleto INNER JOIN aluguel ON clientecompleto.idcliente = aluguel.idcliente
+    ) as temp INNER JOIN carro ON carro.idcarro = temp.idcarro;
+
+GRANT SELECT, INSERT ON aluguelcarros.clientecompleto TO 'funcionario'@'localhost';
+GRANT SELECT, INSERT ON aluguelcarros.aluguelcompleto TO 'funcionario'@'localhost';
 
 CREATE USER 'func1'@'localhost',
     'func2'@'localhost',
@@ -37,9 +45,9 @@ GRANT 'funcionario'@'localhost' TO 'func1'@'localhost',
 
 CREATE ROLE 'gerente'@'localhost';
 
-DROP VIEW IF EXISTS agenteempregado;
+DROP VIEW IF EXISTS agentecompleto, manutencaocompleto;
 
-CREATE VIEW agenteempregado AS
+CREATE VIEW agentecompleto AS
     SELECT agente.idfilial, pf.*
     FROM (
         SELECT pessoa.nome, funcionario.*
@@ -47,7 +55,17 @@ CREATE VIEW agenteempregado AS
     ) AS pf INNER JOIN agente ON pf.idfuncionario = agente.idfuncionario
     WHERE agente.statusgerente IS FALSE;
 
-GRANT SELECT ON aluguelcarros.agenteempregado TO 'gerente'@'localhost';
+CREATE VIEW manutencaocompleto AS
+    SELECT carro.placa, carro.preco, carro.fabricante, carro.modelo, carro.ano, carro.cor, temp2.*
+    FROM (
+        SELECT estacaomanutencao.localizacao, estacaomanutencao.horfunc, manutencao.*
+        FROM estacaomanutencao INNER JOIN manutencao ON estacaomanutencao.idestacao = manutencao.idestacao
+    ) AS temp2 INNER JOIN carro ON carro.idcarro = temp2.idcarro;
+
+GRANT SELECT ON aluguelcarros.agentecompleto TO 'gerente'@'localhost';
+GRANT ALL ON aluguelcarros.manutencaocompleto TO 'gerente'@'localhost';
+GRANT ALL ON aluguelcarros.clientecompleto TO 'funcionario'@'localhost';
+GRANT ALL ON aluguelcarros.aluguelcompleto TO 'funcionario'@'localhost';
 
 CREATE USER 'gerente1'@'localhost',
     'gerente2'@'localhost';

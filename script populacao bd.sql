@@ -55,6 +55,10 @@ VALUES (1, TRUE, 1),
     (3, TRUE, 2),
     (4, FALSE, 2);
 
+INSERT INTO gerencia (idagente, idgerente)
+VALUES (2, 1),
+    (4, 3);
+
 INSERT INTO parceiro (nome, inicioparceria, fimparceria, idfilial)
 VALUES ('Santos Dummond', '2014-05-21', '2017-06-10', 1),
     ('Galeão', '2018-02-25', NULL, 1),
