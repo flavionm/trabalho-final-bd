@@ -83,19 +83,19 @@ INSERT INTO garagem (localizacao, capacidadecarros, capacidadecaminhoes)
 VALUES ('Rio de Janeiro', 50, 10),
     ('São Paulo', 70, 20);
 
-INSERT INTO carro (idgaragem, fabricante, modelo, ano, cor)
-VALUES (1, 'Fiat', 'Uno', 2018, 'Vermelho'),
-    (1, 'Ford', 'Focus', 2017, 'Preto'),
-    (1, 'BMW', 'X5', 2019, 'Prata'),
-    (2, 'Fiat', 'Palio', 2014, 'Preto'),
-    (2, 'Nissan', 'Kicks', 2019, 'Branco'),
-    (2, 'Chevrolet', 'Camaro', 2018, 'Amarelo');
+INSERT INTO carro (idgaragem, placa, preco, fabricante, modelo, ano, cor)
+VALUES (1, 'IMZ3684', '198.00', 'Fiat', 'Uno', 2018, 'Vermelho'),
+    (1, 'HXP5617', '142.79', 'Ford', 'Focus', 2017, 'Preto'),
+    (1, 'MXH6276', '347.89', 'BMW', 'X5', 2019, 'Prata'),
+    (2, 'HSN4794', '89.99', 'Fiat', 'Palio', 2014, 'Preto'),
+    (2, 'MVE5132', '280.59', 'Nissan', 'Kicks', 2019, 'Branco'),
+    (2, 'KAN3806', '240.95', 'Chevrolet', 'Camaro', 2018, 'Amarelo');
 
-INSERT INTO caminhao (idgaragem, fabricante, modelo, ano)
-VALUES (1, 'Mercedes-Benz', 'Accelo', 2016),
-    (1, 'Volvo', 'FH460', 2015),
-    (2, 'Volvo', 'FH540', 2016),
-    (2, 'Volkswagen', 'Constellation', 2019);
+INSERT INTO caminhao (idgaragem, placa, fabricante, modelo, ano)
+VALUES (1, 'JRP5547', 'Mercedes-Benz', 'Accelo', 2016),
+    (1, 'LKW9792',  'Volvo', 'FH460', 2015),
+    (2, 'MVM4216', 'Volvo', 'FH540', 2016),
+    (2, 'NAA3743', 'Volkswagen', 'Constellation', 2019);
 
 INSERT INTO estacaomanutencao (localizacao, horfunc)
 VALUES ('Rio de Janeiro', '8:00-16:00'),
