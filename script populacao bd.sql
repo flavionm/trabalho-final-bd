@@ -1,7 +1,7 @@
 /*
  * Flávio Sousa - 115037071
- * João Maia -
- * João Pedro -
+ * João Maia - 116111909
+ * João Pedro - 116040336
  * Banco de Dados -
  * Trabalho prático 1 - Script de população do banco de dados
  */
