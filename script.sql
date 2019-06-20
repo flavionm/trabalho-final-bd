@@ -312,64 +312,64 @@ VALUES (1, 1, '2019-06-26', '2019-07-06'),
 
 # 1-Listar o ID de todos os carros indisponíveis  (UNION)
 
-SELECT IDCARRO 
+SELECT IDCARRO
 FROM aluguel
 WHERE retorno > CURDATE() OR retorno IS NULL
 UNION
-SELECT IDCARRO 
+SELECT IDCARRO
 FROM manutencao
 WHERE saida > CURDATE() OR saida IS NULL;
 
 # 2-Listar os carros que atendem a um conjunto específico de fabricantes (IN)
 
-SELECT idcarro, modelo 
-FROM carro 
+SELECT idcarro, modelo
+FROM carro
 WHERE fabricante IN ('AUDI','VOLVO','FIAT','VOLKSWAGEN');
 
 # 3-Listar todos os modelos com menos de 3 carros.  (GROUP BY,HAVING)
 
-SELECT COUNT(*) QUANTIDADE, MODELO FROM CARRO GROUP BY MODELO HAVING COUNT(*) < 3;
+SELECT COUNT(*) QUANTIDADE, MODELO FROM carro GROUP BY MODELO HAVING COUNT(*) < 3;
 
 # 4-Listar todos os clientes que alugaram todos os modelos de carro  (DIVISÃO,+3T)
 
 SELECT nome, COUNT(DISTINCT MODELO) AS '#MODELODIFERENTE'
-FROM ALUGUEL 
-INNER JOIN CARRO ON CARRO.IDCARRO = ALUGUEL.IDCARRO
+FROM aluguel
+INNER JOIN carro ON carro.IDCARRO = aluguel.IDCARRO
 INNER JOIN cliente ON cliente.idcliente = aluguel.idcliente
 INNER JOIN pessoa ON cliente.cpf = pessoa.cpf GROUP BY nome
-HAVING COUNT(DISTINCT MODELO) = (SELECT  COUNT(DISTINCT MODELO) FROM CARRO);
+HAVING COUNT(DISTINCT MODELO) = (SELECT  COUNT(DISTINCT MODELO) FROM carro);
 
 # 5-Listar todos os clientes que alugaram um UNO  (EXISTS,+3T)
 
-SELECT pessoa.nome 
-FROM cliente 
+SELECT pessoa.nome
+FROM cliente
 INNER JOIN pessoa ON pessoa.cpf = cliente.cpf
 WHERE EXISTS
-    (SELECT idaluguel 
-    FROM aluguel 
-    INNER JOIN carro ON carro.IDCARRO = aluguel.IDCARRO 
+    (SELECT idaluguel
+    FROM aluguel
+    INNER JOIN carro ON carro.IDCARRO = aluguel.IDCARRO
     WHERE aluguel.idcliente = cliente.idcliente AND carro.MODELO = 'Uno');
-    
+
 # 6-Mostrar o quanto cada cliente gastou no total (+3T)
 
-SELECT nome,  CONCAT('R$ ',FORMAT(DATEDIFF(retorno, retirada) * preco,2)) AS 'total gasto'
-FROM pessoa 
+SELECT nome, CONCAT('R$ ',FORMAT(DATEDIFF(retorno, retirada) * preco,2)) AS 'total gasto'
+FROM pessoa
 INNER JOIN cliente ON cliente.cpf = pessoa.cpf
 INNER JOIN aluguel ON aluguel.idcliente = cliente.idcliente
 INNER JOIN carro ON carro.idcarro = aluguel.idcarro;
 
 # 7-Listar todos os clientes que alugaram todos os carros (+3T)
 
-SELECT NOME, COUNT(DISTINCT IDCARRO) AS '#CarrosDiferente' 
-FROM ALUGUEL 
+SELECT NOME, COUNT(DISTINCT IDCARRO) AS '#CarrosDiferente'
+FROM aluguel
 INNER JOIN cliente ON cliente.IDcliente = aluguel.IDCLIENTE
 INNER JOIN pessoa ON pessoa.CPF = cliente.CPF
 GROUP BY NOME
-HAVING COUNT(DISTINCT idcarro) = (SELECT  COUNT(DISTINCT IDCARRO) FROM CARRO);
+HAVING COUNT(DISTINCT idcarro) = (SELECT  COUNT(DISTINCT IDCARRO) FROM carro);
 
 # 8-Consulta para trazer o nome do caminhoneiro e placa do caminhão (+3T)
 
-SELECT nome,placa 
+SELECT nome,placa
 FROM caminhoneiro
 INNER JOIN caminhao ON caminhoneiro.IDCAMINHAO = caminhao.IDCAMINHAO
 INNER JOIN funcionario ON funcionario.IDFUNCIONARIO = caminhoneiro.IDFUNCIONARIO
@@ -396,7 +396,7 @@ WHERE hotel.localizacao = "Rio de Janeiro";
 # 11 - Buscar os funcionários que são gerenciados por alguém com Marcos no nome (+3T)
 
 SELECT gerentePessoa.nome,gerenciadoPessoa.nome
-FROM agente agentegerente 
+FROM agente agentegerente
 INNER JOIN funcionario gerentes ON gerentes.idfuncionario = agentegerente.idfuncionario
 INNER JOIN pessoa gerentePessoa ON gerentePessoa.cpf = gerentes.cpf
 INNER JOIN gerencia ON gerencia.idgerente = agentegerente.idagente
@@ -417,7 +417,7 @@ WHERE caminhao.idcaminhao IS NULL;
 # 13 - Todos os carros que estão disponiveis (+3T)
 
 SELECT DISTINCT carro.*
-FROM carro 
+FROM carro
 WHERE idcarro NOT IN(SELECT idcarro FROM aluguel WHERE RETORNO > CURDATE())
 AND idcarro NOT IN(SELECT idcarro FROM manutencao WHERE SAIDA > CURDATE());
 
